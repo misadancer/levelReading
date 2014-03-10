@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="4dip"
+    android:paddingLeft="12dip"
+    android:paddingRight="12dip" >
+
+	<TextView
+        android:id="@+id/Number"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Lesson"
+        android:padding="3dip"
+        android:textSize="15dip" />
+
+    <TextView
+        android:id="@+id/Title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Number"
+        android:padding="3dip"
+        android:text="this is text title"
+        android:textSize="20dip"
+        android:textColor="#68c39f"  />
+
+</RelativeLayout>
