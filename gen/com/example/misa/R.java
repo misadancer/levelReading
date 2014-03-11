@@ -30,10 +30,10 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int Number=0x7f0a0005;
-        public static final int RelativeLayout01=0x7f0a0004;
-        public static final int Title=0x7f0a0006;
-        public static final int action_settings=0x7f0a0007;
+        public static final int Number=0x7f0a0006;
+        public static final int RelativeLayout01=0x7f0a0005;
+        public static final int Title=0x7f0a0007;
+        public static final int bar_title=0x7f0a0004;
         public static final int content=0x7f0a0002;
         public static final int main_list=0x7f0a0000;
         public static final int scrollView1=0x7f0a0001;

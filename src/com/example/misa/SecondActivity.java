@@ -1,7 +1,9 @@
 package com.example.misa;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import android.annotation.SuppressLint;
-import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +11,9 @@ import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -19,6 +24,8 @@ public class SecondActivity extends Activity
 	private String content;
 	private SpannableStringBuilder style;
 	private SeekBar seek_bar;
+	private int off = 1;
+	private int level = 0;
 	
 	@SuppressLint("NewApi")
 	@Override
@@ -81,8 +88,6 @@ public class SecondActivity extends Activity
 	    int i = Integer.parseInt(value, 10);
 	    content = contentArray[i];
 	    
-	    // 初始level值
-	    int level = 0;
 	    changeLevel(level);
 	    
 		// 设置SeekBar
@@ -91,6 +96,38 @@ public class SecondActivity extends Activity
         seek_bar.setOnSeekBarChangeListener(sbLis);
 	}
 	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		menu.add(0,1,1, "高亮单词");
+		menu.add(0,2,2, "取消高亮");
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		if(item.getItemId() == 1)
+		{
+			off = 0;
+			seek_bar = (SeekBar)findViewById(R.id.seekBar);
+			seek_bar.setVisibility(View.VISIBLE);
+			changeLevel(level);
+			return true;
+		}
+		if(item.getItemId() == 2)
+		{
+			off = 1;
+			seek_bar = (SeekBar)findViewById(R.id.seekBar);
+			seek_bar.setVisibility(View.GONE);
+			changeLevel(level);
+			return true;
+		}
+		return false;
+	}
     private OnSeekBarChangeListener sbLis = new OnSeekBarChangeListener(){
    	 
 		@Override
@@ -146,6 +183,10 @@ public class SecondActivity extends Activity
 	// 分级
 	public void changeLevel(int level)
 	{	  
+		if(off == 1) {
+			text_content.setText(content);
+			return;
+		}
 		String[][] keywords = {
 			   //level 0
 			   {"St.Petersburg","Las","sauerkraut","package","satiation","vivify","sedulously","convulsive","megacycle","radio astronomer","radio frequency","bluebottle","legibly","penholder","seismometer","ninepin","ticklish","mahout","inmost","winkle","interminably","methylated","bactericidal","carbonated","correspondingly","disunited","unreasoning","disloyalty","purchasable","Leaning","Ptolemy","Aristotelian","Inquisition","bulrush","ladybird","colour-blind","hover-train","Norfolk","indisposition","curative","fervently","forefathers","Baltic","inrush","steepen","zoomorphic","bogged","sabre-toothed","paleontological","crevasse","vole","unutterable","intimation","indefinable","undeclared","disinherit","encroaching","absurdly","vanished","framed","viperine","haemolytic","neurotoxic","mamba","strychnine","scaly","electroencephalograph","secrecy","New","squall","dust","coring","geologist","cutting","block","justifiably","Kansas","AT%26T","memory-chip","Macintosh","commissary","thither","Chippenham","Athelney","wandering","electrocute","dialysis","mimic","social","lotto","the Alps","flea-ridden","alpinist","Matterhorn","fossil","afresh","cobra","checker","parishioner","painlessly","Missouri","partridge","acrobatic","Siberian","frantically","sociologist","grimly","chambermaid","kashmir","drifting","passionately","abatement","princeton","uniquely","albatross","ethanol","Stockholm","cherub","Polynesian","Indonesia","Morocco","derrick","twofold","Aristotle","tipster","recuperation","longitudinal","Apollo","indifferently","run-down","galleon","fritter","contrivance","caprice","blandishment","anthropologist","weariness","rattlesnake","potentiality","phenomena","pestilence","overwhelmingly","migration","hovercraft","effectiveness","contamination","vertebrate","vernacular","topography","termite","tadpole","tableland","sustenance","superstructure","strata","spiteful","speculation","proceeds","prevailing","porcupine","physiological","nebula","mythology","meteorologist","integrated","insularity","infallibility","indescribable","inclement","imperceptible","immolation","heretic","gusher","flint","familiarity","epithet","eddy","drove","disinfectant","delinquency","ceaselessly","Antipodes","myxomatosis","waterlogged","aquaplane","oceanarium","interstellar", "preservation", "porpoise", "scavenger", "thermodynamics", "chicanery", "fatuous", "content", "court", "crack", "fit", "like", "mean", "might", "oppress", "permanently", "ring", "bewilder", "fluctuation", "freshen", "leakage", "sincerity", "slumber", "transverse", "yeast", "California", "conceited", "evaluation", "analogous", "culpable", "ignoble", "insinuate", "itinerant", "preponderance","presumptuous","radiance","serenity","snout","trifling","viper", "aberrant","archaeologist","arsenic","auditory", "carnivore"}
@@ -177,28 +218,21 @@ public class SecondActivity extends Activity
 			return;
 		}
 		int result = content.indexOf(word, start);
-	    if(result > 0) {
+	    if(result > -1) {
+	    	// 排除掉错误单词
+	    	String pre = content.charAt(result -1) + "";
+	    	Pattern pattern = Pattern.compile("[a-zA-Z]");
+	        Matcher m = pattern.matcher(pre); 
+	        if(m.find()){
+	        	return;
+	        }
 	    	// 设置高亮
 	    	int end = result + word.length();
 	    	style.setSpan(new ForegroundColorSpan(Color.RED),result, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
 	    	searchWord(word, end + 1);
 	    }
 	}	
-	
-	/**
-	 * 实现 ActionBar.OnNavigationListener接口
-	 */
-	@SuppressLint("NewApi")
-	public class DropDownListenser implements OnNavigationListener
-	{
-		String[] listNames = getResources().getStringArray(R.array.level);
 
-		public boolean onNavigationItemSelected(int itemPosition, long itemId)
-		{
-			changeLevel(Integer.parseInt(listNames[itemPosition]));
-			return true;
-		}
-	}
 }
 
 
