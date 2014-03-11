@@ -221,11 +221,9 @@ public class SecondActivity extends Activity
 	    if(result > -1) {
 	    	// ≈≈≥˝µÙ¥ÌŒÛµ•¥ 
 	    	String pre = content.charAt(result -1) + "";
-	    	Pattern pattern = Pattern.compile("[a-zA-Z]");
-	        Matcher m = pattern.matcher(pre); 
-	        if(m.find()){
-	        	return;
-	        }
+	    	if(pre.matches("^[a-zA-Z]*")){
+	    		return;
+			} 
 	    	// …Ë÷√∏ﬂ¡¡
 	    	int end = result + word.length();
 	    	style.setSpan(new ForegroundColorSpan(Color.RED),result, end, Spannable.SPAN_EXCLUSIVE_INCLUSIVE);
